@@ -1,0 +1,21 @@
+FROM ruby:3.4
+# ベースにするイメージを指定
+
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs default-mysql-client vim
+# RailsのインストールやMySQLへの接続に必要なパッケージをインストール
+
+RUN mkdir /gamemo
+# コンテナ内にgamemoディレクトリを作成
+
+WORKDIR /gamemo
+# 作成したgamemoディレクトリを作業用ディレクトリとして設定
+
+COPY ./app/Gemfile /gamemo/Gemfile
+COPY ./app/Gemfile.lock /gamemo/Gemfile.lock
+# ローカルの Gemfile と Gemfile.lock をコンテナ内のgamemo配下にコピー
+
+# RUN bundle install
+# コンテナ内にコピーした Gemfile の bundle install
+
+COPY ./app /gamemo
+# ローカルのapp配下のファイルをコンテナ内のgamemo配下にコピー
