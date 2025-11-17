@@ -1,8 +1,11 @@
 FROM ruby:3.4
 # ベースにするイメージを指定
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs default-mysql-client vim
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs default-mysql-client vim npm
 # RailsのインストールやMySQLへの接続に必要なパッケージをインストール
+
+# Yarn のインストール
+RUN npm install -g yarn
 
 RUN mkdir /gamemo
 # コンテナ内にgamemoディレクトリを作成
