@@ -22,7 +22,8 @@ html
     nav.bg-black.shadow-md
       .max-w-6xl.mx-auto.flex.items-center.justify-between.p-4
         /タイトル
-        h1.text-2xl.font-bold.tracking-wide.text-white GameMo
+        h1.text-2xl.font-bold.tracking-wide.text-white 
+          = link_to 'GameMo', root_path
         /カテゴリメニュー
         .relative.ml-6 
           button.text-gray-300.hover:text-white.px-4.py-2.rounded-md.focus:outline-none
@@ -36,7 +37,7 @@ html
               | 検索
         /ログイン・新規登録ボタン
         .flex.space-x-4 
-          =link_to 'ログイン', '#', class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
+          =link_to 'ログイン', login_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
           =link_to '新規登録', '#', class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
     
     = yield
