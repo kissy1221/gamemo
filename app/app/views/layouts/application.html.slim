@@ -17,7 +17,7 @@ html
     - # Includes all stylesheet files in app/assets/stylesheets
     = stylesheet_link_tag :app, "data-turbo-track": "reload"
     = javascript_importmap_tags
-  body
+  body.min-h-screen.flex.flex-col.bg-gray-100
     /ナビゲーションバー
     nav.bg-black.shadow-md
       .max-w-6xl.mx-auto.flex.items-center.justify-between.p-4
@@ -38,7 +38,7 @@ html
         /ログイン・新規登録ボタン
         .flex.space-x-4 
           =link_to 'ログイン', login_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
-          =link_to '新規登録', '#', class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
+          =link_to '新規登録', new_user_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
     
     = yield
 
