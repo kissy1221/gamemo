@@ -39,7 +39,8 @@ html
         /ログイン・新規登録ボタン
         .flex.space-x-4 
           - if logged_in?
-            =link_to 'マイページ', login_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
+            =link_to 'マイページ', '#', class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
+            =button_to 'ログアウト', logout_path, method: :delete, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
           - else
             =link_to 'ログイン', login_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
             =link_to '新規登録', new_user_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'

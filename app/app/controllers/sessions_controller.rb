@@ -1,4 +1,8 @@
 class SessionsController < ApplicationController
+
+  before_action :redirect_if_logged_in, only: [:new, :create]
+  before_action :require_login, only: [:destroy]
+
   def new
   end
 
@@ -19,13 +23,18 @@ class SessionsController < ApplicationController
 
   # ログアウト処理  
   def destroy
-
+    reset_session
+    redirect_to root_url, notice: 'Logged out successfully.'
   end
 
   private
 
   def session_params
     params.require(:session).permit(:email, :password)
+  end
+
+  def redirect_if_logged_in
+      redirect_to root_path, alert: 'You are already logged in.' if logged_in?
   end
 
 end

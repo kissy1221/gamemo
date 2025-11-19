@@ -12,5 +12,15 @@ class ApplicationController < ActionController::Base
   def logged_in?
     current_user.present?
   end
+
+  def require_login
+    unless logged_in?
+      redirect_to login_path, alert: 'You must be logged in to access this section'
+    end
+  end
+
+  def redirect_if_logged_in(path = root_path)
+      redirect_to path, alert: 'You are already logged in.' if logged_in?
+  end
   
 end
