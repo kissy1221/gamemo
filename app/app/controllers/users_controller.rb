@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  # ユーザ登録
   def create
       @user = User.new(user_params)
 
@@ -16,15 +17,19 @@ class UsersController < ApplicationController
       end
   end
 
+  # ユーザ詳細情報
   def show
   end
 
+  # ユーザ情報編集
   def edit
   end
 
+  # ユーザ情報更新
   def update
   end
 
+  # ユーザ削除（退会)
   def destroy
   end
 
