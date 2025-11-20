@@ -27,7 +27,24 @@
         p.text-sm.text-gray-600.mb-4 パスワードを定期的に変更してアカウントを安全に保ちましょう。
         = link_to "パスワードを変更する", "#", class: "inline-flex justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-white font-semibold hover:bg-gray-700 transition"
 
-      .rounded-2xl.border.border-red-200.p-6.bg-red-50
+      .rounded-2xl.border.border-red-200.p-6.bg-red-50[data-controller="confirm-modal"]
         h2.text-xl.font-semibold.text-red-700.mb-2 退会手続き
         p.text-sm.text-red-600.mb-4 退会すると復元できません。ご注意ください。
-        = button_to "退会する", user_path(@user), method: :delete, data: { turbo_confirm: "本当に退会しますか？" }, class: "inline-flex justify-center rounded-xl bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-500 transition"
+        = button_tag "退会する",
+          type: "button",
+          data: { action: "confirm-modal#open" },
+          class: "inline-flex justify-center rounded-xl bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-500 transition"
+
+        / モーダル
+        .fixed.inset-0.bg-black/20.backdrop-blur-xs.flex.items-center.justify-center.px-4.hidden.opacity-0.transition-opacity.duration-200[data-confirm-modal-target="overlay" data-action="click->confirm-modal#close"]
+          .bg-white.rounded-2xl.w-full.max-w-md.p-6.space-y-6.opacity-0.translate-y-4.scale-95.transition-all.duration-200.ease-out(data-confirm-modal-target="dialog" data-action="click->confirm-modal#stop")
+            div
+              h3.text-2xl.font-bold.text-gray-900.mb-2 退会の最終確認
+              p.text-sm.text-gray-600 本当に退会しますか？アカウントと関連データは復元できません。
+            .flex.flex-col.sm:flex-row.sm:justify-end.gap-3
+              button type="button" class="inline-flex justify-center rounded-xl border border-gray-300 px-5 py-2.5 font-semibold text-gray-700 hover:bg-gray-50 transition" data-action="confirm-modal#close"
+                | キャンセル
+              = button_to "退会を実行する",
+                user_path(@user),
+                method: :delete,
+                class: "inline-flex justify-center rounded-xl bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-500 transition"
