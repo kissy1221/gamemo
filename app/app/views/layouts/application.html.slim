@@ -37,10 +37,17 @@ html
             button.absolute.right-1.top-1/2.transform.-translate-y-1/2.bg-gray-900.text-white.px-4.py-1.rounded-full.hover:bg-gray-700.transition type="submit"
               | 検索
         /ログイン・新規登録ボタン
-        .flex.space-x-4 
+        .flex.items-center.space-x-4 
           - if logged_in?
-            =link_to 'マイページ', '#', class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
-            =button_to 'ログアウト', logout_path, method: :delete, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
+            .relative[data-controller="dropdown"]
+              button.bg-blue-700.text-white.font-semibold.px-5.py-2.rounded-full.shadow.hover:bg-blue-600.transition.flex.items-center.space-x-2 type="button" data-action="click->dropdown#toggle" data-dropdown-target="button" aria-haspopup="true" aria-expanded="false"
+                span マイページ
+                svg.w-4.h-4.fill-current viewBox="0 0 20 20"
+                  path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              .absolute.right-0.mt-2.w-48.bg-white.rounded-lg.shadow-xl.py-2.hidden.z-20 data-dropdown-target="menu"
+                = link_to 'マイページ', user_path(current_user), class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
+                = link_to 'プロフィール編集', edit_user_path(current_user), class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
+                = link_to 'ログアウト', logout_path, data: { turbo_method: :delete }, class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
           - else
             =link_to 'ログイン', login_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
             =link_to '新規登録', new_user_path, class: 'bg-blue-700 text-white font-semibold px-5 py-2 rounded-full shadow hover:bg-blue-600 transition'
