@@ -23,10 +23,17 @@ class UsersController < ApplicationController
 
   # ユーザ情報編集
   def edit
+    @user = User.find(params[:id])
   end
 
   # ユーザ情報更新
   def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      redirect_to root_url
+    else
+      render :edit
+    end
   end
 
   # ユーザ削除（退会)
