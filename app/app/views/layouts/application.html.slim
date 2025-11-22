@@ -23,7 +23,7 @@ html
       .max-w-6xl.mx-auto.flex.items-center.justify-between.p-4
         / --- ロゴ + タイトル（クリックでトップへ） ---
         = link_to root_path, class: "flex items-center space-x-3" do
-          = image_tag "GameMo5.png", alt: "GameMo Logo", class: "h-10 w-auto"
+          = image_tag "GameMo_symble.svg", alt: "GameMo Symbol", class: "h-10 w-auto"
           h1.text-2xl.font-bold.tracking-wide.text-white GameMo
         /カテゴリメニュー
         .relative.ml-6 
@@ -45,7 +45,7 @@ html
                 svg.w-4.h-4.fill-current viewBox="0 0 20 20"
                   path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
               .absolute.right-0.mt-2.w-48.bg-white.rounded-lg.shadow-xl.py-2.hidden.z-20 data-dropdown-target="menu"
-                = link_to 'マイページ', user_path(current_user), class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
+                = link_to 'マイレビュー', '#', class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
                 = link_to 'プロフィール編集', edit_user_path(current_user), class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
                 = link_to 'ログアウト', logout_path, data: { turbo_method: :delete }, class: 'block px-4 py-2 text-gray-800 hover:bg-gray-100'
           - else
@@ -55,6 +55,8 @@ html
     = yield
 
     footer.bg-gray-100.border-t.border-gray-300.text-center.py-8
+      .flex.justify-center.mb-4
+        = image_tag "GameMo_logo.svg", alt: "GameMo Logo", class: "h-8 w-auto"
       p.text-gray-600.mb-4 © 2025 GameMo. All Rights Reserved.
       .flex.justify-center.space-x-6
         = link_to "#", class: "text-gray-600 hover:text-gray-900 transition", aria: { label: "Twitter" } do
