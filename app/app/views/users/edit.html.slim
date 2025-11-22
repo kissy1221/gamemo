@@ -1,2 +1,51 @@
-h1 Users#edit
-p Find me in app/views/users/edit.html.slim
+.min-h-screen.bg-gray-100.py-10
+  .max-w-xl.mx-auto.bg-white.rounded-2xl.shadow-lg.p-10.space-y-10
+    .space-y-2
+      h1.text-3xl.font-bold.text-gray-900 プロフィール編集
+      p.text-gray-600 アカウント情報を更新してください。変更内容は保存ボタンを押すまで反映されません。
+
+    = form_with model: @user, url: user_path(@user), method: :patch, local: true do |f|
+      .grid.grid-cols-1.gap-6
+        .space-y-2
+          = f.label :name, "ユーザー名", class: "block text-sm font-semibold text-gray-800"
+          = f.text_field :name,
+            class: "w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-200",
+            placeholder: "GameMo 太郎"
+        .space-y-2
+          = f.label :email, "メールアドレス", class: "block text-sm font-semibold text-gray-800"
+          = f.email_field :email,
+            class: "w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-200",
+            placeholder: "example@gamemo.jp"
+
+      .flex.justify-center.mt-8
+        = f.submit "変更を保存する", class: "inline-flex justify-center rounded-xl bg-blue-600 px-6 py-3 text-white font-semibold shadow hover:bg-blue-500 transition"
+
+    .space-y-6
+      / 区切り線と「または」
+      .relative
+        .absolute.inset-0.flex.items-center
+          .w-full.border-t.border-gray-300
+        .relative.flex.justify-center.text-sm
+          span.bg-white.px-4.text-gray-500 または
+
+      / パスワード変更と退会ボタン
+      .flex.flex-col.sm:flex-row.gap-4[data-controller="confirm-modal"]
+        = link_to "パスワードを変更する", "#", class: "flex-1 inline-flex justify-center items-center rounded-xl bg-gray-900 px-6 py-3 text-white font-semibold hover:bg-gray-700 transition"
+        = button_tag "退会する",
+          type: "button",
+          data: { action: "confirm-modal#open" },
+          class: "flex-1 inline-flex justify-center items-center rounded-xl bg-red-600 px-6 py-3 text-white font-semibold hover:bg-red-500 transition"
+
+        / モーダル
+        .fixed.inset-0.bg-black/20.backdrop-blur-xs.flex.items-center.justify-center.px-4.hidden.opacity-0.transition-opacity.duration-200[data-confirm-modal-target="overlay" data-action="click->confirm-modal#close"]
+          .bg-white.rounded-2xl.w-full.max-w-md.p-6.space-y-6.opacity-0.translate-y-4.scale-95.transition-all.duration-200.ease-out(data-confirm-modal-target="dialog" data-action="click->confirm-modal#stop")
+            div
+              h3.text-2xl.font-bold.text-gray-900.mb-2 退会の最終確認
+              p.text-sm.text-gray-600 本当に退会しますか？アカウントと関連データは復元できません。
+            .flex.flex-col.sm:flex-row.sm:justify-end.gap-3
+              button type="button" class="inline-flex justify-center rounded-xl border border-gray-300 px-5 py-2.5 font-semibold text-gray-700 hover:bg-gray-50 transition" data-action="confirm-modal#close"
+                | キャンセル
+              = button_to "退会を実行する",
+                user_path(@user),
+                method: :delete,
+                class: "inline-flex justify-center rounded-xl bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-500 transition"
