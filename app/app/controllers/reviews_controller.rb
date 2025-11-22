@@ -1,5 +1,7 @@
 class ReviewsController < ApplicationController
   def index
+    @user = User.find(params[:user_id])
+    @reviews = @user.reviews
   end
 
   def show
@@ -18,5 +20,13 @@ class ReviewsController < ApplicationController
   end
 
   def destroy
+  end
+
+  private
+
+  def user_params
+  end
+
+  def game_params
   end
 end

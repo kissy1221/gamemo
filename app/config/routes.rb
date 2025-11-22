@@ -11,13 +11,15 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   root "home#index"
-  resources :users
+  resources :users do
+    resources :reviews, only: [:index, :show]
+  end
   resources :games do
     resources :reviews, only: [:index, :show, :create]
   end
   resources :reviews, only: [:create, :edit, :update, :destroy]
 
-  
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
