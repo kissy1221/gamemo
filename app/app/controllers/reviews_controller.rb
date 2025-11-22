@@ -1,7 +1,12 @@
 class ReviewsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
-    @reviews = @user.reviews
+    @reviews = 
+      if current_user == @user
+        @user.reviews
+      else
+        @user.reviews.where(is_public: true)
+      end
   end
 
   def show

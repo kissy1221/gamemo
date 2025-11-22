@@ -9,6 +9,8 @@ class GamesController < ApplicationController
   end
 
   def show
+    @game = Game.find(params[:id])
+    @reviews = @game.reviews.where(is_public: true)
   end
 
   def edit
