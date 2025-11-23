@@ -45,7 +45,7 @@ gem "thruster", require: false
 gem 'slim-rails'
 gem 'html2slim2', require: false
 gem 'ransack'
-gem 'kaminari'
+gem 'kaminari', github: "kaminari/kaminari"
 
 #多言語対応
 gem 'rails-i18n', '~> 8.0.0' 

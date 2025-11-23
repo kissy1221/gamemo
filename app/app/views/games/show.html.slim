@@ -114,6 +114,7 @@ section.bg-gray-50.min-h-screen.py-10
       .flex.flex-col.gap-6
         - @reviews.each do |review|
           = render partial: "reviews/review_card_horizontal", locals: { review: review, show_game_name: false, show_user_info: true }
+      = paginate @reviews
     - else
       .text-center.py-16
         .mb-6
