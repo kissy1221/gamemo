@@ -12,15 +12,6 @@ class ReviewsController < ApplicationController
     @total_likes_count = @reviews.sum(:likes_count) || 0
   end
 
-  def show
-  end
-
-  def new
-  end
-
-  def edit
-  end
-
   def create
     @review = current_user.reviews.build(review_params)
     if @review.save

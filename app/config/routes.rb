@@ -15,9 +15,9 @@ Rails.application.routes.draw do
     resources :reviews, only: [:index, :show]
   end
   resources :games, only: [:index, :show] do
-    resources :reviews, only: [:index, :show, :new, :create]
+    resources :reviews, only: [:index, :show, :create]
   end
-  resources :reviews, only: [:create, :edit, :update, :destroy]
+  resources :reviews, only: [:update, :destroy]
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
