@@ -243,6 +243,8 @@ game_titles.each_with_index do |title, index|
     g.developer = developers.sample
     g.publisher = publishers.sample
     g.official_site_url = "https://example.com/games/#{title.parameterize}"
+    # プレースホルダー画像URL（適当な画像を表示）
+    g.cover_image_url = "https://picsum.photos/seed/#{title.parameterize}/800/600"
   end
 
   # ゲームにジャンルを関連付け（1-3個のランダムなジャンル）
@@ -264,3 +266,122 @@ game_titles.each_with_index do |title, index|
 end
 
 puts "Seeds completed: #{Genre.count} genres, #{Platform.count} platforms, #{Game.count} games created."
+
+# ダミーユーザーの作成（レビュー投稿用）
+puts "\nCreating dummy users..."
+user_names = [
+  "ゲーマー太郎", "プレイヤー花子", "ゲーム好き", "レビュアーA", "レビュアーB",
+  "ゲームマスター", "プレイヤー123", "ゲームファン", "レビュアーC", "ゲーマーZ",
+  "プレイヤーX", "ゲーム愛好家", "レビュアーD", "ゲーマーY", "プレイヤーW",
+  "ゲーム評論家", "プレイヤーV", "ゲーマーU", "レビュアーE", "ゲームハンター",
+  "プレイヤーT", "ゲーマーS", "レビュアーF", "ゲームエンジョイ", "プレイヤーR",
+  "ゲーマーQ", "レビュアーG", "ゲームマニア", "プレイヤーP", "ゲーマーO",
+  "レビュアーH", "ゲームコレクター", "プレイヤーN", "ゲーマーM", "レビュアーI",
+  "ゲームファンタジー", "プレイヤーL", "ゲーマーK", "レビュアーJ", "ゲームアドベンチャー",
+  "プレイヤーI", "ゲーマーH", "レビュアーK", "ゲームストーリー", "プレイヤーG",
+  "ゲーマーF", "レビュアーL", "ゲームアクション", "プレイヤーE", "ゲーマーD",
+  "レビュアーM", "ゲームRPG", "プレイヤーC", "ゲーマーB", "レビュアーN"
+]
+
+users = []
+user_names.each_with_index do |name, index|
+  user = User.find_or_create_by!(email: "user#{index + 1}@example.com") do |u|
+    u.name = name
+    u.password = "password123"
+    u.password_confirmation = "password123"
+  end
+  users << user
+end
+
+puts "Created #{users.count} users."
+
+# レビューのタイトルと本文のテンプレート
+review_titles = [
+  "最高のゲーム体験！",
+  "期待を超える作品",
+  "時間を忘れてしまう",
+  "グラフィックが美しい",
+  "ストーリーが素晴らしい",
+  "ゲームプレイが面白い",
+  "リプレイ価値あり",
+  "おすすめです",
+  "満足のいく内容",
+  "期待していた以上",
+  "少し物足りない",
+  "改善の余地あり",
+  "中々の良作",
+  "プレイする価値あり",
+  "時間がもったいない",
+  "期待外れだった",
+  "普通のゲーム",
+  "悪くはない",
+  "良い点と悪い点",
+  "総合的に良い",
+  "初心者にもおすすめ",
+  "上級者向け",
+  "マルチプレイが楽しい",
+  "シングルプレイ重視",
+  "バランスが良い",
+  "難易度が適切",
+  "やり込み要素あり",
+  "カジュアル向け",
+  "ハードコア向け",
+  "幅広い層におすすめ"
+]
+
+review_bodies = [
+  "このゲームは本当に素晴らしいです。グラフィックも美しく、ストーリーも引き込まれます。",
+  "期待していた以上に面白かったです。時間を忘れてプレイしてしまいます。",
+  "ゲームプレイが非常にスムーズで、操作性も良いです。おすすめです。",
+  "ストーリーが感動的で、キャラクターも魅力的です。続編が楽しみです。",
+  "グラフィックが非常に美しく、世界観に没入できます。",
+  "難易度が適切で、初心者でも楽しめる内容になっています。",
+  "やり込み要素が多く、長く楽しめるゲームだと思います。",
+  "マルチプレイが楽しく、友達と一緒にプレイするのがおすすめです。",
+  "音楽も素晴らしく、全体的に完成度が高い作品です。",
+  "少し物足りない部分もありますが、全体的には良いゲームです。",
+  "期待していたほどではなかったですが、悪くはないです。",
+  "改善の余地はありますが、プレイする価値はあると思います。",
+  "中々の良作です。時間があればプレイしてみてください。",
+  "普通のゲームですが、悪くはないです。",
+  "良い点と悪い点がありますが、総合的には良いと思います。",
+  "初心者にもおすすめできる内容になっています。",
+  "上級者向けの難易度設定で、やりがいがあります。",
+  "バランスが良く、幅広い層におすすめできるゲームです。",
+  "カジュアルに楽しめる内容で、気軽にプレイできます。",
+  "ハードコアなプレイヤーにも満足してもらえる内容です。"
+]
+
+# 各game_platformに対して50個のレビューを作成
+puts "\nCreating reviews for each game platform..."
+GamePlatform.find_each.with_index do |game_platform, index|
+  puts "Creating reviews for game platform #{index + 1}/#{GamePlatform.count}..." if (index + 1) % 10 == 0
+  
+  50.times do
+    Review.create!(
+      user: users.sample,
+      game_platform: game_platform,
+      score: rand(0..100),
+      title: review_titles.sample,
+      body: review_bodies.sample,
+      is_public: rand(0..1) == 1,
+      likes_count: rand(0..100),
+      created_at: rand(365).days.ago,
+      updated_at: rand(365).days.ago
+    )
+  end
+end
+
+# game_platformのaverage_scoreとreview_countを更新
+puts "\nUpdating game platform statistics..."
+GamePlatform.find_each do |game_platform|
+  reviews = game_platform.reviews
+  if reviews.any?
+    game_platform.update!(
+      average_score: reviews.average(:score).round(1),
+      review_count: reviews.count
+    )
+  end
+end
+
+puts "\nSeeds completed: #{Genre.count} genres, #{Platform.count} platforms, #{Game.count} games, #{User.count} users, #{Review.count} reviews created."

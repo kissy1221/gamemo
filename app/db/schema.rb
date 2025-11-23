@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_22_045058) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_084603) do
   create_table "game_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "genre_id", null: false
@@ -40,6 +40,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_045058) do
     t.string "official_site_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cover_image_url"
   end
 
   create_table "genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
