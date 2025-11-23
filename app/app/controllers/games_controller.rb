@@ -11,6 +11,7 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @reviews = @game.reviews.where(is_public: true)
+    @average_score = @reviews.where.not(score: nil).average(:score)
   end
 
   def edit

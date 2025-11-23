@@ -1,0 +1,7 @@
+/ スコアバッジのpartial
+/ local variables: score, size (optional, "large" or "small", default: "large")
+- size = local_assigns.fetch(:size, "large")
+- size_class = size == "large" ? "w-16 h-16 text-xl" : "w-10 h-10 text-sm"
+
+.inline-flex.items-center.justify-center.rounded-full.font-bold.text-white class="#{score_class(score)} #{size_class}"
+  = score

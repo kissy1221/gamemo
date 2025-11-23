@@ -7,6 +7,7 @@ class ReviewsController < ApplicationController
       else
         @user.reviews.where(is_public: true)
       end
+    @total_likes_count = @reviews.sum(:likes_count) || 0
   end
 
   def show

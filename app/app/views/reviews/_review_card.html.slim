@@ -1,0 +1,63 @@
+/ レビューカードのpartial
+/ local variables: review, show_game_name (optional, default: false), show_user_info (optional, default: false)
+- show_game_name = local_assigns.fetch(:show_game_name, false)
+- show_user_info = local_assigns.fetch(:show_user_info, false)
+
+.relative[data-controller="confirm-modal"]
+  .bg-white.rounded-xl.shadow-md.hover:shadow-lg.transition-shadow.overflow-hidden.flex.flex-col.h-full
+    .p-5.flex.flex-col.flex-1
+      / レビュータイトルとゲーム情報
+      .flex.flex-col.mb-3
+        h3.text-lg.font-bold.text-gray-900.mb-2.line-clamp-2
+          = review.title || "レビュー"
+        - if show_game_name && review.game_platform&.game
+          p.text-gray-600.text-sm.mb-1.truncate
+            = review.game_platform.game.name
+        - if review.game_platform&.platform
+          p.text-xs.text-gray-500 class=(show_game_name ? "" : "mb-1")
+            = review.game_platform.platform.name
+        - if show_user_info && review.user
+          p.text-xs.text-gray-400
+            | 投稿者: 
+            = review.user.name || review.user.email
+      
+      / スコア表示
+      - if review.score
+        .mb-3
+          = render partial: "reviews/score_badge", locals: { score: review.score, size: "large" }
+      
+      / レビュー本文
+      - if review.body.present?
+        .mb-3.flex-1
+          p.text-gray-700.text-sm.whitespace-pre-wrap.line-clamp-3
+            = truncate(review.body, length: 100)
+      
+      / フッター情報
+      .pt-3.border-t.border-gray-200.mt-auto
+        .flex.flex-col.gap-2
+          .flex.items-center.justify-between.text-xs.text-gray-500
+            - if review.created_at
+              time[datetime=review.created_at.iso8601]
+                = review.created_at.strftime("%Y/%m/%d")
+            - if review.is_public == false
+              span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-gray-100.text-gray-600
+                | 非公開
+            - else
+              span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-green-100.text-green-600
+                | 公開中
+            
+            - if review.likes_count && review.likes_count > 0
+              .flex.items-center.gap-1.text-gray-600.text-xs
+                svg.w-4.h-4.fill-current.text-red-500[viewBox="0 0 20 20"]
+                  path[d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"]
+                span.font-semibold
+                  = review.likes_count
+      
+      / 続きを読むボタン
+      - if review.body.present? && review.body.length > 100
+        .mt-3
+          button type="button" class="text-blue-600 hover:text-blue-800 font-semibold text-xs w-full" data-action="confirm-modal#open"
+            | 続きを読む
+  
+  / モーダル（レビュー全文表示）
+  = render partial: "reviews/review_modal", locals: { review: review, show_game_name: show_game_name, show_user_info: show_user_info }
