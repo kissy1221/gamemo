@@ -1,0 +1,85 @@
+/ 横長レビューカードのpartial
+/ local variables:
+/   - review: Reviewオブジェクト
+/   - show_game_name: ゲーム名を表示するか（デフォルト: false）
+/   - show_user_info: ユーザー情報を表示するか（デフォルト: false）
+- show_game_name = local_assigns.fetch(:show_game_name, false)
+- show_user_info = local_assigns.fetch(:show_user_info, false)
+- can_edit = logged_in? && current_user == review.user
+- controller_names = can_edit ? "confirm-modal review-modal delete-confirm-modal" : "confirm-modal"
+
+.relative[data-controller=controller_names]
+  .bg-white.rounded-xl.shadow-md.hover:shadow-lg.transition-shadow.overflow-hidden
+    .p-5.flex.flex-col.md:flex-row.gap-4
+      / 左側: レビュー内容
+      .flex-1.min-w-0
+        / レビュータイトルとゲーム情報
+        .flex.flex-col.mb-3
+          h3.text-lg.font-bold.text-gray-900.mb-2.line-clamp-2
+            = review.title || "レビュー"
+          - if show_game_name && review.game_platform&.game
+            p.text-gray-600.text-sm.mb-1.truncate
+              = review.game_platform.game.name
+          - if review.game_platform&.platform
+            p.text-xs.text-gray-500
+              = review.game_platform.platform.name
+        
+        / レビュー本文
+        - if review.body.present?
+          .mb-3
+            p.text-gray-700.text-sm.whitespace-pre-wrap.line-clamp-3
+              = truncate(review.body, length: 150)
+        
+        / フッター情報
+        .pt-3.border-t.border-gray-200
+          .flex.flex-col.gap-2
+            .flex.items-center.justify-between.text-xs.text-gray-500
+              - if review.created_at
+                time[datetime=review.created_at.iso8601]
+                  = review.created_at.strftime("%Y/%m/%d")
+              
+              - if review.likes_count && review.likes_count > 0
+                .flex.items-center.gap-1.text-gray-600.text-xs
+                  svg.w-4.h-4.fill-current.text-red-500[viewBox="0 0 20 20"]
+                    path[d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"]
+                  span.font-semibold
+                    = review.likes_count
+        
+        / アクションボタン
+        .mt-3.flex.flex-wrap.gap-2
+          - if review.body.present? && review.body.length > 150
+            button type="button" class="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 font-semibold text-xs py-2 px-4 rounded-lg border border-blue-200 hover:bg-blue-50 transition whitespace-nowrap" data-action="confirm-modal#open"
+              | 続きを読む
+          - if can_edit
+            button type="button" class="inline-flex items-center justify-center text-red-600 hover:text-red-800 font-semibold text-xs py-2 px-4 rounded-lg border border-red-200 hover:bg-red-50 transition whitespace-nowrap" data-action="click->delete-confirm-modal#open"
+              | 削除
+            button type="button" class="inline-flex items-center justify-center text-green-600 hover:text-green-800 font-semibold text-xs py-2 px-4 rounded-lg border border-green-200 hover:bg-green-50 transition whitespace-nowrap" data-action="click->review-modal#open" data-review-id=review.id
+              | 編集
+      
+      / 右側: スコア表示
+      - if review.score
+        .shrink-0.flex.items-start
+          = render partial: "reviews/score_badge", locals: { score: review.score, size: "large" }
+  
+  / モーダル（レビュー全文表示）
+  = render partial: "reviews/review_modal", locals: { review: review, show_game_name: show_game_name, show_user_info: show_user_info }
+  
+  / 編集モーダル（自分のレビューの場合のみ）
+  - if can_edit && review.game_platform&.game
+    = render partial: "reviews/review_form", locals: { review: review, game: review.game_platform.game, form_url: review_path(review), form_method: :patch, submit_text: "更新する", modal_title: "レビューを編集", use_parent_controller: true }
+  
+  / 削除確認モーダル（自分のレビューの場合のみ）
+  - if can_edit
+    .fixed.inset-0.bg-black/20.backdrop-blur-xs.flex.items-center.justify-center.px-4.hidden.opacity-0.transition-opacity.duration-200.z-50[data-delete-confirm-modal-target="overlay" data-action="click->delete-confirm-modal#close"]
+      .bg-white.rounded-2xl.w-full.max-w-md.p-6.space-y-6.opacity-0.translate-y-4.scale-95.transition-all.duration-200.ease-out[data-delete-confirm-modal-target="dialog" data-action="click->delete-confirm-modal#stop"]
+        div
+          h3.text-2xl.font-bold.text-gray-900.mb-2 レビューを削除
+          p.text-sm.text-gray-600 本当にこのレビューを削除しますか？この操作は取り消せません。
+        .flex.flex-col.sm:flex-row.sm:justify-end.gap-3
+          button type="button" class="inline-flex justify-center rounded-xl border border-gray-300 px-5 py-2.5 font-semibold text-gray-700 hover:bg-gray-50 transition" data-action="delete-confirm-modal#close"
+            | キャンセル
+          = button_to "削除を実行する",
+            review_path(review),
+            method: :delete,
+            class: "inline-flex justify-center rounded-xl bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-500 transition"
+

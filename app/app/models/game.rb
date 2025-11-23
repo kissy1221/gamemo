@@ -11,4 +11,7 @@ class Game < ApplicationRecord
       name
     ]
   end
+
+  def average_score
+  end
 end
