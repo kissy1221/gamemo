@@ -58,7 +58,7 @@ section.bg-gray-50.min-h-screen.py-10
               / 右側: 平均スコアとジャンル
               .flex.flex-col.gap-3.shrink-0.items-end
                 / 平均スコア
-                - average_score = game.reviews.where(is_public: true).where.not(score: nil).average(:score)
+                - average_score = game.average_score
                 - if average_score
                   = render partial: "reviews/score_badge", locals: { score: average_score.round(1), size: "large" }
                 

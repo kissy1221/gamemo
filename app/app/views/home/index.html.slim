@@ -12,24 +12,91 @@ section.relative.bg-gray-900.border-b.border-gray-600.overflow-hidden
     p.text-xl.md:text-2xl.text-gray-200.mb-8.max-w-2xl.mx-auto 新作ゲームから名作まで、評価・レビュー・スコアをシンプルにチェック。
     =link_to '新規レビュー投稿', '#', class: 'inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-500 transition transform hover:scale-105'
 
-section.bg-gray-50.py-10
-  .max-w-6xl.mx-auto.px-4
-    h3.text-2xl.font-bold.text-gray-900.mb-3
-      | ベストゲーム
-    hr.border-gray-600.mb-6
-    .grid.grid-cols-1.md:grid-cols-3.gap-6
-section.bg-gray-50.py-10
-  .max-w-6xl.mx-auto.px-4
-    h3.text-2xl.font-bold.text-gray-900.mb-3
-      | 新着ゲーム
-    hr.border-gray-600.mb-6
-    .grid.grid-cols-1.md:grid-cols-3.gap-6
-section.bg-gray-50.py-10
-  .max-w-6xl.mx-auto.px-4
-    h3.text-2xl.font-bold.text-gray-900.mb-3
-      | 最近レビューされたゲーム
-    hr.border-gray-600.mb-6
-    .grid.grid-cols-1.md:grid-cols-3.gap-6
+/ ゲーム一覧セクション（縦並び）
+section.bg-gradient-to-b.from-gray-50.to-white.py-16
+  .max-w-7xl.mx-auto.px-4
+    .flex.flex-col.gap-16
+      / 新着ゲーム
+      .flex.flex-col[data-controller="horizontal-scroll"]
+        .flex.items-center.justify-between.mb-6
+          .flex.items-center.gap-4
+            h3.text-3xl.font-bold.text-gray-900.tracking-tight
+              | 新着ゲーム
+            .h-1.w-16.bg-gradient-to-r.from-blue-500.to-purple-500.rounded-full
+          .flex.items-center.gap-2
+            / 左スクロールボタン
+            button.horizontal-scroll__prev-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollLeft" data-horizontal-scroll-target="prevButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"]
+            / 右スクロールボタン
+            button.horizontal-scroll__next-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollRight" data-horizontal-scroll-target="nextButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"]
+        - if @new_games.any?
+          / スクロールコンテナ
+          .overflow-x-auto.scrollbar-hide.snap-x.snap-mandatory.scroll-smooth[data-horizontal-scroll-target="scrollContainer"]
+            .flex.flex-row.gap-6.pb-4
+              - @new_games.each do |game|
+                .snap-start.w-48.flex-shrink-0
+                  = render partial: "home/game_card", locals: { game: game }
+        - else
+          .text-center.py-12.text-gray-500
+            p 新着ゲームはありません
+      
+      / ベストゲーム
+      .flex.flex-col[data-controller="horizontal-scroll"]
+        .flex.items-center.justify-between.mb-6
+          .flex.items-center.gap-4
+            h3.text-3xl.font-bold.text-gray-900.tracking-tight
+              | ベストゲーム
+            .h-1.w-16.bg-gradient-to-r.from-yellow-500.to-orange-500.rounded-full
+          .flex.items-center.gap-2
+            / 左スクロールボタン
+            button.horizontal-scroll__prev-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollLeft" data-horizontal-scroll-target="prevButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"]
+            / 右スクロールボタン
+            button.horizontal-scroll__next-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollRight" data-horizontal-scroll-target="nextButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"]
+        - if @best_games.any?
+          / スクロールコンテナ
+          .overflow-x-auto.scrollbar-hide.snap-x.snap-mandatory.scroll-smooth[data-horizontal-scroll-target="scrollContainer"]
+            .flex.flex-row.gap-6.pb-4
+              - @best_games.each do |game|
+                - game_score = game.respond_to?(:avg_score) && game.avg_score ? game.avg_score : game.average_score
+                .snap-start.w-48.flex-shrink-0
+                  = render partial: "home/game_card", locals: { game: game, score: game_score }
+        - else
+          .text-center.py-12.text-gray-500
+            p ベストゲームはありません
+      
+      / 最近レビューされたゲーム
+      .flex.flex-col[data-controller="horizontal-scroll"]
+        .flex.items-center.justify-between.mb-6
+          .flex.items-center.gap-4
+            h3.text-3xl.font-bold.text-gray-900.tracking-tight
+              | 最近レビューされたゲーム
+            .h-1.w-16.bg-gradient-to-r.from-green-500.to-teal-500.rounded-full
+          .flex.items-center.gap-2
+            / 左スクロールボタン
+            button.horizontal-scroll__prev-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollLeft" data-horizontal-scroll-target="prevButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"]
+            / 右スクロールボタン
+            button.horizontal-scroll__next-button.w-10.h-10.bg-white.rounded-full.shadow-md.flex.items-center.justify-center.hover:bg-gray-50.transition-all.border.border-gray-200[data-action="click->horizontal-scroll#scrollRight" data-horizontal-scroll-target="nextButton"]
+              svg.w-5.h-5.text-gray-700[fill="none" stroke="currentColor" viewBox="0 0 24 24"]
+                path[stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"]
+        - if @recently_reviewed_games.any?
+          / スクロールコンテナ
+          .overflow-x-auto.scrollbar-hide.snap-x.snap-mandatory.scroll-smooth[data-horizontal-scroll-target="scrollContainer"]
+            .flex.flex-row.gap-6.pb-4
+              - @recently_reviewed_games.each do |game|
+                .snap-start.w-48.flex-shrink-0
+                  = render partial: "home/game_card", locals: { game: game }
+        - else
+          .text-center.py-12.text-gray-500
+            p 最近レビューされたゲームはありません
 
 
 
