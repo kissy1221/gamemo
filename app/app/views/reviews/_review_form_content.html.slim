@@ -1,0 +1,62 @@
+/ レビューフォームの内容部分（共通パーシャル）
+/ local variables: review, game, form_url, form_method, submit_text, modal_title, initial_score, score_quick_select_values
+/ モーダルヘッダー
+.flex.items-center.justify-between.p-6.border-b.border-gray-200
+  h3.text-2xl.font-bold.text-gray-900 = modal_title
+  button type="button" class="text-gray-400 hover:text-gray-600 transition" data-action="review-modal#close"
+    svg.w-6.h-6.fill-current[viewBox="0 0 20 20"]
+      path[fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"]
+
+/ モーダル本文（フォーム）
+= form_with model: review, url: form_url, method: form_method, local: true, class: "flex flex-col h-full", data: { review_modal_target: "form" } do |f|
+  .flex-1.overflow-y-auto.p-6.space-y-6
+    / ゲーム情報セクション
+    .bg-gray-50.rounded-lg.p-4.border.border-gray-200.space-y-3
+      h2.text-xl.font-bold.text-gray-900 = game.name
+      .space-y-2
+        = f.label :game_platform_id, "プラットフォーム", class: "block text-sm font-semibold text-gray-700"
+        = f.select :game_platform_id, options_for_select(platform_options_for_select(game.game_platforms), review.game_platform_id), { prompt: "プラットフォームを選択してください" }, { class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900", required: true }
+    
+    / スコア
+    .space-y-3
+      = f.label :score, "スコア", class: "block text-sm font-semibold text-gray-700"
+      .space-y-4
+        / スコア表示とスライダー
+        .flex.items-center.gap-4
+          .flex-shrink-0
+            .inline-flex.items-center.justify-center.w-20.h-20.rounded-full.text-2xl.font-bold.text-white.bg-gray-400.transition-colors.duration-200 data-review-modal-target="scoreDisplay"
+              = initial_score
+          .flex-1
+            = f.range_field :score, in: 0..100, value: initial_score, class: "w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer", data: { review_modal_target: "scoreSlider", action: "input->review-modal#updateScore" }
+            .flex.justify-between.text-xs.text-gray-500.mt-1
+              span 0
+              span 50
+              span 100
+        / クイック選択ボタン
+        .flex.flex-wrap.gap-2
+          - score_quick_select_values.each do |score_value|
+            button type="button" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition" data-score=score_value data-action="click->review-modal#setScore"
+              = score_value
+    
+    / タイトル
+    .space-y-2
+      = f.label :title, "レビュータイトル", class: "block text-sm font-semibold text-gray-700"
+      = f.text_field :title, class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900", placeholder: "レビューのタイトルを入力"
+    
+    / 本文
+    .space-y-2
+      = f.label :body, "レビュー本文", class: "block text-sm font-semibold text-gray-700"
+      = f.text_area :body, rows: 8, class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900", placeholder: "レビューの内容を入力してください"
+    
+    / 公開設定
+    .space-y-2
+      .flex.items-center
+        = f.check_box :is_public, { checked: review.is_public != false }, true, false
+        = f.label :is_public, "公開する", class: "ml-2 text-sm text-gray-700"
+  
+  / モーダルフッター
+  .p-6.border-t.border-gray-200.bg-gray-50.flex.items-center.justify-end.gap-3
+    button type="button" class="px-6 py-3 text-gray-700 font-semibold rounded-xl border border-gray-300 hover:bg-gray-50 transition" data-action="review-modal#close"
+      | キャンセル
+    = f.submit submit_text, class: "px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition shadow-md"
+
