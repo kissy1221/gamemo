@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   helper_method :current_user, :logged_in?
+  before_action :set_q
 
   private
 
@@ -21,6 +22,10 @@ class ApplicationController < ActionController::Base
 
   def redirect_if_logged_in(path = root_path)
       redirect_to path, alert: 'You are already logged in.' if logged_in?
+  end
+
+  def set_q
+    @q = Game.ransack(params[:q])
   end
   
 end

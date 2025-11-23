@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   def index
+    @games = @q.result(distinct: true).page(params[:page]).per(20)
   end
 
   def show
