@@ -10,4 +10,5 @@ eagerLoadControllersFrom("controllers", application)
 // Ensure dropdown controller is registered even if manifest isn't refreshed yet
 application.register("dropdown", DropdownController)
 application.register("confirm-modal", ConfirmModalController)
+application.register("delete-confirm-modal", ConfirmModalController)
 application.register("review-modal", ReviewModalController)

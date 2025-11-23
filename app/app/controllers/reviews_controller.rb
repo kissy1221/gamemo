@@ -39,6 +39,11 @@ class ReviewsController < ApplicationController
   end
 
   def destroy
+    @review = current_user.reviews.find(params[:id])
+    if @review.destroy
+      redirect_to fallback_location: root_path, notice: 'Review was successfully destroyed.'
+    else
+    end
   end
 
   private
