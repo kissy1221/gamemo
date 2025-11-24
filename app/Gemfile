@@ -62,6 +62,8 @@ group :development, :test do
 
   gem 'faker', require: false
   gem 'factory_bot_rails', require: false
+  gem 'rspec-rails', require: false
+  gem 'capybara', require: false
 end
 
 group :development do
