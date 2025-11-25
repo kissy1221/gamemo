@@ -38,6 +38,12 @@ class UsersController < ApplicationController
 
   # ユーザ削除（退会)
   def destroy
+    @user = current_user
+    if @user.destroy
+      reset_session
+      redirect_to root_url, notice: 'User was successfully destroyed.'
+    else
+    end
   end
 
   private
