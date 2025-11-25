@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_23_084603) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_132945) do
   create_table "game_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "genre_id", null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_23_084603) do
   end
 
   create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "game_platform_id", null: false
     t.integer "score"
     t.string "title"
