@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
   # ユーザ情報更新
   def update
-    @user = User.find(params[:id])
+    @user = current_user
     if @user.update(user_params)
       redirect_to root_url
     else
