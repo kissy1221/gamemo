@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_132945) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_30_080248) do
   create_table "game_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "genre_id", null: false
@@ -24,7 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_132945) do
     t.bigint "game_id", null: false
     t.bigint "platform_id", null: false
     t.float "average_score"
-    t.integer "review_count"
+    t.integer "review_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_platforms_on_game_id"
@@ -64,7 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_132945) do
     t.string "title"
     t.text "body"
     t.boolean "is_public"
-    t.integer "likes_count"
+    t.integer "likes_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_platform_id"], name: "index_reviews_on_game_platform_id"
