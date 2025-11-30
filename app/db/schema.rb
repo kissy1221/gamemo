@@ -24,7 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_080248) do
     t.bigint "game_id", null: false
     t.bigint "platform_id", null: false
     t.float "average_score"
-    t.integer "review_count", default: 0
+    t.integer "review_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_platforms_on_game_id"
@@ -64,7 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_080248) do
     t.string "title"
     t.text "body"
     t.boolean "is_public"
-    t.integer "likes_count", default: 0
+    t.integer "likes_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_platform_id"], name: "index_reviews_on_game_platform_id"
