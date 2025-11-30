@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+  before_action :require_login, only: [:edit, :update, :destroy]
+
   def index
   end
 
@@ -24,7 +27,7 @@ class UsersController < ApplicationController
 
   # ユーザ情報編集
   def edit
-    @user = User.find(params[:id])
+    @user = current_user
   end
 
   # ユーザ情報更新

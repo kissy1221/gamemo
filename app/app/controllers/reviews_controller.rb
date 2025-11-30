@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :require_login, only: [:create]
+  before_action :require_login, only: [:create, :update, :destroy]
 
   def index
     @user = User.find(params[:user_id])
