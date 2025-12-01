@@ -5,6 +5,12 @@ class Game < ApplicationRecord
   has_many :genres, through: :game_genres
   has_many :platforms, through: :game_platforms
 
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :developer, length: { maximum: 50 }
+  validates :publisher, length: { maximum: 50 }
+  validates :official_site_url, length: { maximum: 2000 }
+  validates :cover_image_url, length: { maximum: 2000 }
+
   scope :new_games, -> {where.not(release_date: nil).order(release_date: :desc).limit(20)}
   scope :best_games, -> {
     left_joins(game_platforms: :reviews)
