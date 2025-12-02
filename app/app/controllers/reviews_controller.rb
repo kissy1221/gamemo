@@ -25,7 +25,7 @@ class ReviewsController < ApplicationController
   def update
     @review = current_user.reviews.find(params[:id])
     if @review.update(review_params)
-      redirect_to fallback_location: root_path, notice: 'Review was successfully updated.'
+      redirect_back fallback_location: root_path, notice: 'Review was successfully updated.'
     else
     end
   end
@@ -33,7 +33,7 @@ class ReviewsController < ApplicationController
   def destroy
     @review = current_user.reviews.find(params[:id])
     if @review.destroy
-      redirect_to fallback_location: root_path, notice: 'Review was successfully destroyed.'
+      redirect_back fallback_location: root_path, notice: 'Review was successfully destroyed.'
     else
     end
   end
