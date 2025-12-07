@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_30_142555) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_07_074626) do
   create_table "game_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "genre_id", null: false
@@ -68,6 +68,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_142555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_platform_id"], name: "index_reviews_on_game_platform_id"
+    t.index ["user_id", "game_platform_id"], name: "index_reviews_on_user_id_and_game_platform_id", unique: true
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 

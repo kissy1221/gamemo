@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
     if @review.save
       redirect_to game_path(params[:game_id]), notice: 'Review was successfully created.'
     else
-
+      redirect_to game_path(params[:game_id]), alert: @review.errors.full_messages.join(', ')
     end
   end
 
