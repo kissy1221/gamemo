@@ -8,9 +8,14 @@ const DIALOG_HIDE_CLASSES = ["opacity-0", "translate-y-4", "scale-95"]
 export default class extends Controller {
   static targets = ["overlay", "dialog", "form", "scoreSlider", "scoreDisplay", "platformSelect", "titleInput", "bodyInput", "isPublicInput", "submitButton"]
 
-  open(event) {
+  async open(event) {
     event.preventDefault()
     clearTimeout(this.hideTimeout)
+
+    // モーダルを開く前に、既にプラットフォームが選択されている場合は既存レビューを取得
+    if (this.hasPlatformSelectTarget && this.platformSelectTarget.value) {
+      await this.checkExistingReviewForSelectedPlatform()
+    }
 
     this.overlayTarget.classList.remove("hidden")
 
@@ -93,11 +98,44 @@ export default class extends Controller {
 
     this.hideTimeout = setTimeout(() => {
       this.overlayTarget.classList.add("hidden")
-      // Reset form when closing
+      // フォームをリセットするが、プラットフォームの選択は保持
+      // （次回開いた時に既存レビューを再チェックするため）
       if (this.hasFormTarget) {
-        this.formTarget.reset()
-        // 新規作成モードに戻す
-        this.resetToCreateMode()
+        // プラットフォームの選択状態を保持するため、フォーム全体をリセットしない
+        // 代わりに、各フィールドのみをクリア（プラットフォームは保持）
+        const selectedPlatformId = this.platformSelectTarget?.value
+        
+        // フォームの各フィールドをクリア
+        if (this.hasTitleInputTarget) {
+          this.titleInputTarget.value = ""
+        }
+        if (this.hasBodyInputTarget) {
+          this.bodyInputTarget.value = ""
+        }
+        if (this.hasScoreSliderTarget) {
+          const defaultScore = 50
+          this.scoreSliderTarget.value = defaultScore
+          this.updateScore({ target: this.scoreSliderTarget })
+        }
+        if (this.hasIsPublicInputTarget) {
+          this.isPublicInputTarget.checked = false
+        }
+        
+        // フォームのURLとメソッドを新規作成用に戻す
+        const gameId = this.platformSelectTarget?.dataset.gameId
+        if (gameId) {
+          this.formTarget.action = `/games/${gameId}/reviews`
+          this.formTarget.method = "post"
+          const methodInput = this.formTarget.querySelector('input[name="_method"]')
+          if (methodInput) {
+            methodInput.remove()
+          }
+        }
+        
+        // 送信ボタンのテキストを戻す
+        if (this.hasSubmitButtonTarget) {
+          this.submitButtonTarget.textContent = "投稿する"
+        }
       }
     }, 200)
   }
@@ -114,7 +152,20 @@ export default class extends Controller {
       return
     }
 
-    const gameId = event.target.dataset.gameId
+    await this.checkExistingReviewForPlatform(gamePlatformId)
+  }
+
+  async checkExistingReviewForSelectedPlatform() {
+    if (!this.hasPlatformSelectTarget) return
+    
+    const gamePlatformId = this.platformSelectTarget.value
+    if (!gamePlatformId) return
+
+    await this.checkExistingReviewForPlatform(gamePlatformId)
+  }
+
+  async checkExistingReviewForPlatform(gamePlatformId) {
+    const gameId = this.platformSelectTarget?.dataset.gameId
     if (!gameId) return
 
     try {
