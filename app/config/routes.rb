@@ -15,7 +15,11 @@ Rails.application.routes.draw do
     resources :reviews, only: [:index, :show]
   end
   resources :games, only: [:index, :show] do
-    resources :reviews, only: [:index, :show, :create]
+    resources :reviews, only: [:index, :show, :create] do
+      collection do
+        get :check  # GET /games/:game_id/reviews/check?game_platform_id=:id
+      end
+    end
   end
   resources :reviews, only: [:update, :destroy]
 
