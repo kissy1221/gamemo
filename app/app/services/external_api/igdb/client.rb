@@ -13,9 +13,7 @@ class ExternalApi::Igdb::Client
         "Authorization" => "Bearer #{@token}",
         "Client-ID" => @client_id,
       },
-      body: 'fields name, game_localizations.region,game_localizations.cover.image_id,game_localizations.name;
-      search "BIOHAZARD";
-      limit 10;'
+      body: body
     )
   end
 end
