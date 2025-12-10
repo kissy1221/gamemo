@@ -1,0 +1,2 @@
+class Importer::GameImporter
+end
