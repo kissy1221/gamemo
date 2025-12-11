@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_07_074626) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_11_135237) do
   create_table "game_genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "genre_id", null: false
@@ -41,6 +41,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_074626) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cover_image_url"
+    t.bigint "igdb_id", null: false
+    t.index ["igdb_id"], name: "index_games_on_igdb_id", unique: true
   end
 
   create_table "genres", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -48,6 +50,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_074626) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "igdb_id", null: false
+    t.index ["igdb_id"], name: "index_genres_on_igdb_id", unique: true
   end
 
   create_table "platforms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -55,6 +59,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_074626) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "igdb_id", null: false
+    t.index ["igdb_id"], name: "index_platforms_on_igdb_id", unique: true
   end
 
   create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

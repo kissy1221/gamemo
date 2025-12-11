@@ -10,6 +10,7 @@ class Game < ApplicationRecord
   validates :publisher, length: { maximum: 50 }
   validates :official_site_url, length: { maximum: 2000 }
   validates :cover_image_url, length: { maximum: 2000 }
+  validates :igdb_id, presence: true, uniqueness: true
 
   scope :new_games, -> {where.not(release_date: nil).order(release_date: :desc).limit(20)}
   scope :best_games, -> {
