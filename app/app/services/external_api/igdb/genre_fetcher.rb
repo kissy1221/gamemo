@@ -3,8 +3,10 @@ class ExternalApi::Igdb::GenreFetcher
     @client = ExternalApi::Igdb::Client.new
   end
 
-  def fetch_genres(query)
-    @client.post('genres', "fields name, slug;
-    limit 100;")
+  def fetch(offset=0)
+    @client.post('genres', 
+    "fields name, slug;
+    limit #{ExternalApi::Igdb::Constraints::MAX_LIMIT};
+    offset #{offset};")
   end
 end
