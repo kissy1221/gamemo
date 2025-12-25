@@ -5,7 +5,7 @@ class Game < ApplicationRecord
   has_many :genres, through: :game_genres
   has_many :platforms, through: :game_platforms
 
-  validates :name, presence: true, length: { maximum: 100 }
+  validates :name, presence: true, length: { maximum: 300 }
   validates :developer, length: { maximum: 50 }
   validates :publisher, length: { maximum: 50 }
   validates :official_site_url, length: { maximum: 2000 }
