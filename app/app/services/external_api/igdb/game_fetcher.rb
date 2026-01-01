@@ -10,4 +10,9 @@ class ExternalApi::Igdb::GameFetcher
       limit #{ExternalApi::Igdb::Constraints::MAX_LIMIT};
       offset #{offset};")
   end
+
+  def count
+    @client.post('games/count', 
+      "where game_type = (0,2,4,8,9,10,11) & version_parent = null;")['count'].to_i
+  end
 end
